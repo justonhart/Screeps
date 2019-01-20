@@ -3,7 +3,6 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleMaintenance = require('role.maintenance');
 var roleDistributor = require('role.distributor');
-var roleAttacker = require('role.attacker');
 var roleDemo = require('role.demo');
 var roleTransporter = require('role.transporter');
 var roleMiner = require('role.miner');
