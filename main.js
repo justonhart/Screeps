@@ -11,7 +11,7 @@ var popControl = require('s.population');
 //const profiler = require('screeps-profiler');
 
 //profiler.enable();
-module.exports.loop = function () {
+module.exports.loop = function () {\
     //profiler.wrap(function(){
         
         
