@@ -1,5 +1,4 @@
 //Runs room specific tasks: manage population, sources, etc
-var sourceManager = require('s.sourceManager');
 var populationControl = require('s.population');
 
 //operating mode key: 1 = prestorage, 2 = storage, 3 = eco
