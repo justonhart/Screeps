@@ -106,5 +106,9 @@ function sendDistressSignal(creep){
     creep.suicide();
 }
 
+// function checkForCore(creep){
+//     if(console.log(Game.rooms["E48S36"].find(FIND_STRUCTURES, {filter: function(object) {return object.structureType == STRUCTURE_INVADER_CORE;}})))
+// }
+
 
 module.exports = remoteMiner;
