@@ -7,7 +7,7 @@ var roleMason = {
             
             let target = Game.getObjectById(creep.memory.target);
             if(target){
-                if(creep.pos.getRangeTo(target) > 3)
+                if(creep.pos.getRangeTo(target) > 3 || creep.onEdge())
                     creep.moveTo(target);
                 else
                     if(target instanceof Structure)
