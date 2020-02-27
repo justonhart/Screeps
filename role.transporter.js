@@ -30,7 +30,7 @@ var roleTransporter = {
             }
             
             //if target is container, withdraw
-            else if(target instanceof Structure || target instanceof Tombstone){
+            else if(target instanceof Structure || target instanceof Tombstone || target instanceof Ruin){
                 switch(creep.withdraw(target, _.findKey(target.store, function(resource){return resource > 0}))){
                     case 0:
                     case ERR_NOT_ENOUGH_RESOURCES:
@@ -69,6 +69,9 @@ function findTarget(creep){
     
     if(creep.room.find(FIND_TOMBSTONES, {filter: t => {return _.sum(t.store);}}).length)
         creep.memory.target = Game.rooms[creep.memory.home].find(FIND_TOMBSTONES, {filter: t => {return _.sum(t.store);}})[0].id;
+
+    else if(creep.room.find(FIND_RUINS, {filter: t => {return _.sum(t.store);}}).length)
+        creep.memory.target = Game.rooms[creep.memory.home].find(FIND_RUINS, {filter: t => {return _.sum(t.store);}})[0].id;
 
     else if(containers.length)
         creep.memory.target =  _.max(containers, function(c) {return _.sum(c.store)}).id;
