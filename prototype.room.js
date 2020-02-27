@@ -36,7 +36,7 @@ Object.defineProperty(Room.prototype, 'operatingMode', {
 
 Room.prototype.getDefHP = function(){
     if(this.controller.level === 8 && this.storage && this.economyStatus > ECON_STABLE)
-        return 20000000;
+        return MAX_DEFENSE_HP;
     return this.controller.level * 100000 * 5/8;
 }
 
