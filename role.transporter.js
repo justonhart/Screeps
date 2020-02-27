@@ -69,7 +69,7 @@ function findTarget(creep){
     
     if(creep.room.find(FIND_TOMBSTONES, {filter: t => {return _.sum(t.store);}}).length)
         creep.memory.target = Game.rooms[creep.memory.home].find(FIND_TOMBSTONES, {filter: t => {return _.sum(t.store);}})[0].id;
-    
+
     else if(containers.length)
         creep.memory.target =  _.max(containers, function(c) {return _.sum(c.store)}).id;
     
