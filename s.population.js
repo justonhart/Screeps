@@ -107,7 +107,7 @@ function storageSpawning(spawn){
     
     if(!_.filter(Game.creeps, (creep) => creep.memory.role === 'distributor' && creep.memory.home === spawn.room.name).length){
         roleString = 'distributor';
-        creepLevelCap = 8;
+        creepLevelCap = 10;
     }
     
     else if( _.filter(Game.creeps, (creep) => creep.memory.role === 'miner' && creep.memory.home === spawn.room.name).length < _.size(spawn.room.memory.localSources))
@@ -115,7 +115,7 @@ function storageSpawning(spawn){
     
     else if(!_.filter(Game.creeps, (creep) => creep.memory.role === 'transporter' && creep.memory.home === spawn.room.name).length){
         roleString = 'transporter';
-        creepLevelCap = 8;
+        creepLevelCap = 10;
     }
     
     else if(spawn.room.name === Memory.empire.colonyLaunchRoom && Memory.empire.colonyRoomUnclaimed && !_.filter(Game.creeps, (creep) => creep.memory.role === 'claimer').length)
