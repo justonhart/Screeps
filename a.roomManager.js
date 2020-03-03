@@ -70,7 +70,7 @@ function checkMiners(room){
 
 function manageTerminal(room){
     
-    let myRooms = _.filter(Game.rooms, function (r) {return r.controller && r.controller.my && r.terminal;});
+    let myRooms = _.filter(Game.rooms, function (r) {return r.controller && r.controller.my && r.terminal && r.terminal.my;});
     let targetRoom = _.min(myRooms, function(r) {return r.storage.store[RESOURCE_ENERGY];});
     
     if(room.terminal.store[RESOURCE_ENERGY] > 25000 && !room.terminal.cooldown && room.terminal.store[room.mineral.mineralType] >= 30000 && Game.time%100 === 0){
