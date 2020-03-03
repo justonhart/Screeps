@@ -2,20 +2,20 @@
 
 var remoteTransporter = {
     run: function(creep){
-        
+
         if(creep.hits < creep.hitsMax)
             sendDistressSignal(creep);
-        
+
         if(creep.pos.lookFor(LOOK_RESOURCES).length && creep.carry[RESOURCE_ENERGY] < creep.carryCapacity)
             creep.pickup(creep.pos.lookFor(LOOK_RESOURCES)[0]);
-        
+
         if(!creep.memory.delivering){
-            
+
             if(!creep.memory.target)
                 findTarget(creep);
-            
+
             let target = Game.getObjectById(creep.memory.target);
-            
+
             if(target){
                 if(creep.pos.isNearTo(target)){
                     creep.withdraw(target, RESOURCE_ENERGY);
@@ -25,18 +25,26 @@ var remoteTransporter = {
                 else
                     creep.moveTo(target, {reusePath: 50});
             }
-            else
-                creep.say("Can't find target");
+            else{
+
+              //the creep will move fairly close to the a source to wait for a miner
+              let x = _.findKey(Game.rooms[creep.memory.home].memory.remoteMining[creep.memory.assignment].sources, function(src){return src;}).split(",")[0];
+              let y = _.findKey(Game.rooms[creep.memory.home].memory.remoteMining[creep.memory.assignment].sources, function(src){return src;}).split(",")[1];
+
+              let waitPos = new RoomPosition(x,y,creep.memory.assignment);
+              creep.moveTo(waitPos, {range: 2});
+            }
+
         }
-        
-        
+
+
         else{
-            
+
             if(creep.carry.energy === 0)
                 creep.memory.delivering = false;
-            
+
             else{
-                
+
                 if(creep.room.name !== creep.memory.home){
                     if(!roadWork(creep))
                         creep.moveTo(Game.rooms[creep.memory.home].storage, {reusePath: 50, ignoreCreeps: true, plainCost: 2, swampCost: 3});
@@ -50,7 +58,7 @@ var remoteTransporter = {
                     }
                     else{
                         creep.moveTo(creep.room.storage, {reusePath: 15});
-                        
+
                         if(creep.pos.isNearTo(creep.room.storage)){
                             creep.transfer(creep.room.storage, RESOURCE_ENERGY);
                             creep.memory.delivering = false;
@@ -60,7 +68,7 @@ var remoteTransporter = {
             }
         }
     }
-    
+
 }
 
 function findTarget(creep){
@@ -75,7 +83,7 @@ function findTarget(creep){
 
 function sendDistressSignal(creep){
     console.log(creep.name + ": SOS");
-    if(!Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].distressSignal)
+    if(!Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].distressSignal && !creep.room.my)
         Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].distressSignal = "SOS";
     creep.suicide();
 }
@@ -89,12 +97,12 @@ function roadWork(creep){
         creep.pos.createConstructionSite(STRUCTURE_ROAD);
         return true;
     }
-        
+
     else if(creep.pos.lookFor(LOOK_CONSTRUCTION_SITES).length){
         creep.build(creep.pos.lookFor(LOOK_CONSTRUCTION_SITES)[0]);
         return true;
     }
-        
+
     else if(_.filter(creep.pos.lookFor(LOOK_STRUCTURES), s => {return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax;}).length){
         creep.repair(_.filter(creep.pos.lookFor(LOOK_STRUCTURES), s => {return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax;})[0]);
         return true;

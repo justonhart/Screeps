@@ -71,7 +71,7 @@ var remoteMiner = {
                     creep.moveTo(destination, {reusePath: 50});
                 
                 //if there, but no construction site, make one    
-                else{
+                else if(creep.room.controller.reservation && creep.room.controller.reservation.username === "jhart22"){
                     creep.room.createConstructionSite(creep.pos, STRUCTURE_CONTAINER);
                     creep.memory.destination = creep.pos.lookFor(LOOK_CONSTRUCTION_SITES)[0].id;
                 }
