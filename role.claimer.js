@@ -19,7 +19,7 @@ var roleClaimer = {
             if (flag) {
                 
                 if (creep.pos.roomName != flag.pos.roomName || flag == Game.flags[waypoint]){
-                    creep.moveTo(flag, {reusePath: 50});
+                    creep.moveTo(flag, {reusePath: 50, visualizePathStyle: {stroke: '#3BFF2B', opacity: 1}, maxOps: 5000});
                     if(creep.pos.isNearTo(flag) && flag == Game.flags[waypoint])
                         creep.memory.waypoint++;
                 }
