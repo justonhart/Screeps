@@ -28,8 +28,8 @@ var remoteTransporter = {
             else{
 
               //the creep will move fairly close to the a source to wait for a miner
-              let x = _.findKey(Game.rooms[creep.memory.home].memory.remoteMining[creep.memory.assignment].sources, function(src){return src;}).split(",")[0];
-              let y = _.findKey(Game.rooms[creep.memory.home].memory.remoteMining[creep.memory.assignment].sources, function(src){return src;}).split(",")[1];
+              let x = _.findKey(Game.rooms[creep.memory.home].memory.remoteMining[creep.memory.assignment].sources, function(src){return true;}).split(",")[0];
+              let y = _.findKey(Game.rooms[creep.memory.home].memory.remoteMining[creep.memory.assignment].sources, function(src){return true;}).split(",")[1];
 
               let waitPos = new RoomPosition(x,y,creep.memory.assignment);
               creep.moveTo(waitPos, {range: 2});
