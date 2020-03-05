@@ -30,7 +30,7 @@ function voyage(creep){
     
     if(flag){
         if(creep.room.name != flag.pos.roomName || flag == Game.flags[waypoint]){
-            creep.moveTo(flag, {reusePath: 50});
+            creep.moveTo(flag, {reusePath: 50, visualizePathStyle: {stroke: '#3BFF2B', opacity: 1}, maxOps: 10000});
             if(creep.pos.isNearTo(flag) && flag == Game.flags[waypoint])
                 creep.memory.waypoint++;
         }
