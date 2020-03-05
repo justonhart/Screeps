@@ -31,7 +31,7 @@ function findTask(creep){
     //creep.say("finding Task");
 
     //if creep is carrying nonenergy resources, store them before doing primary task
-    if(creep.store.getUsedCapacity() > creep.store.getUsedCapacity(RESOURCE_ENERGY)){
+    if(creep.store.getUsedCapacity() > creep.store.getUsedCapacity(RESOURCE_ENERGY) && creep.room.storage.store.getUsedCapacity() < 995000){
         creep.memory.task = "store";
         return;
     }
@@ -45,7 +45,7 @@ function findTask(creep){
     }
 
     //if the creep is carrying anything at all after distribution, store it before doing secondary tasks
-    if(creep.store.getUsedCapacity()){
+    if(creep.store.getUsedCapacity() && creep.room.storage.store.getUsedCapacity() < 995000){
         creep.memory.task = "store";
         return;
     }
