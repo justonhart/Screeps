@@ -230,7 +230,9 @@ function storageSpawning(spawn){
       
       
       let result = spawn.spawnCreep(partsArray, roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
-      console.log(spawn.room.name + ":  " + roleString + " cost : " + partsBlockCost + ": "+ result);
+
+      //console printout for testing purposes
+      //console.log(spawn.room.name + ":  " + roleString + " parts block cost: " + partsBlockCost + ": "+ result);
       
       if(result === ERR_NOT_ENOUGH_ENERGY && roleString === "distributor" && !_.filter(Game.creeps, (creep) => creep.memory.role === 'transporter' && creep.memory.home === spawn.room.name).length){
           
