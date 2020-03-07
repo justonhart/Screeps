@@ -133,7 +133,7 @@ function storageSpawning(spawn){
     }
     
     else if(spawn.room.name === Memory.empire.demoSpawnRoom && !_.filter(Game.creeps, (creep) => creep.memory.role === 'demo').length)
-        spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK,WORK, WORK, WORK, WORK, MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], "demo"+Game.time, {memory: {role: 'demo'}});
+        roleString = 'demo';//spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK,WORK, WORK, WORK, WORK, MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], "demo"+Game.time, {memory: {role: 'demo'}});
     
     else if(spawn.room.find(FIND_STRUCTURES, {filter: structure => {return structure.structureType === STRUCTURE_TOWER}}).length == 0
     && !(_.filter(Game.creeps, (creep) => creep.memory.role === 'maintenance' && creep.memory.home === spawn.room.name).length))
@@ -192,16 +192,27 @@ function storageSpawning(spawn){
                 let partsBlock;
                 if(roleString === 'distributor' || roleString === 'transporter')
                     partsBlock = [CARRY, CARRY, MOVE];
+                else if(roleString === 'demo')
+                  partsBlock = [WORK, MOVE];
                 else
                     partsBlock = [WORK, CARRY, MOVE];
                 
+                let partsBlockCost = 0;
+                for(let p in partsBlock){
+                  if(partsBlock[p] == WORK)
+                    partsBlockCost += 100;
+                  else if(partsBlock[p] == CARRY || partsBlock[p] == MOVE)
+                    partsBlockCost += 50;
+                }
                 
                 /*Since the cost of WORK, CARRY, MOVE is 200, find the number of those sets that can be put onto one creep*/
-                for(let i = 0; i < Math.floor(spawn.room.energyCapacityAvailable / 200) && i < creepLevelCap; i++)
+                for(let i = 0; i < Math.floor(spawn.room.energyCapacityAvailable / partsBlockCost) && i < creepLevelCap; i++)
                     partsArray = partsArray.concat(partsBlock);
                 
                 
                 let result = spawn.spawnCreep(partsArray, roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
+                console.log(spawn.room.name + ":  " + roleString + " cost : " + partsBlockCost + ": "+ result);
+                
                 if(result === ERR_NOT_ENOUGH_ENERGY && roleString === "distributor" && !_.filter(Game.creeps, (creep) => creep.memory.role === 'transporter' && creep.memory.home === spawn.room.name).length){
                     
                     partsArray = [];
@@ -261,6 +272,7 @@ function ecoSpawning(spawn){
         
         //spawn the creep
         let result = spawn.spawnCreep(partsArray, "Creep "+Game.time, {memory: {role: roleString, home:spawn.room.name}}); 
+
         
         //if there are no harvesters, and there is not enough energy to spawn one
         if(result === ERR_NOT_ENOUGH_ENERGY && roleString === "harvester"){
