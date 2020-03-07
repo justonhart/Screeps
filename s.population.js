@@ -170,59 +170,74 @@ function storageSpawning(spawn){
         spawn.spawnCreep([MOVE], "signer "+ spawn.room.name, {memory: {role: 'signer', home: spawn.room.name}});
     
     if(roleString){
-        switch(roleString){
-            
-            case 'mineralMiner':
-                console.log(spawn.room.name + ": spawning mineral miner");
-                let parts = [];
-                let block = [WORK, WORK, MOVE];
-                
-                for(let i = 0; i < Math.floor(spawn.room.energyAvailable / 250) && i < creepLevelCap; i++)
-                    parts = parts.concat(block);
-                
-                spawn.spawnCreep(parts, roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
-                break;
-            case 'manager':
-                spawn.spawnCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE], roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
-                break;
-            default:
-                
-                //calculate parts to use for creeps
-                let partsArray = [];
-                let partsBlock;
-                if(roleString === 'distributor' || roleString === 'transporter')
-                    partsBlock = [CARRY, CARRY, MOVE];
-                else if(roleString === 'demo')
-                  partsBlock = [WORK, MOVE];
-                else
-                    partsBlock = [WORK, CARRY, MOVE];
-                
-                let partsBlockCost = 0;
-                for(let p in partsBlock){
-                  if(partsBlock[p] == WORK)
-                    partsBlockCost += 100;
-                  else if(partsBlock[p] == CARRY || partsBlock[p] == MOVE)
-                    partsBlockCost += 50;
-                }
-                
-                /*Since the cost of WORK, CARRY, MOVE is 200, find the number of those sets that can be put onto one creep*/
-                for(let i = 0; i < Math.floor(spawn.room.energyCapacityAvailable / partsBlockCost) && i < creepLevelCap; i++)
-                    partsArray = partsArray.concat(partsBlock);
-                
-                
-                let result = spawn.spawnCreep(partsArray, roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
-                console.log(spawn.room.name + ":  " + roleString + " cost : " + partsBlockCost + ": "+ result);
-                
-                if(result === ERR_NOT_ENOUGH_ENERGY && roleString === "distributor" && !_.filter(Game.creeps, (creep) => creep.memory.role === 'transporter' && creep.memory.home === spawn.room.name).length){
-                    
-                    partsArray = [];
-                    for(let i = 0; i < Math.floor(spawn.room.energyAvailable / 200) && i < creepLevelCap; i++)
-                        partsArray = partsArray.concat(partsBlock);
-                    
-                    spawn.spawnCreep(partsArray, roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
-                }
-                break;
+
+      //calculate parts to use for creeps
+      let partsArray = [];
+      let partsBlock;
+      
+      switch(roleString){
+          
+          case 'mineralMiner':
+            console.log(spawn.room.name + ": spawning mineral miner");
+            partsBlock = [WORK, WORK, MOVE];
+            break;
+          case 'distributor':
+          case 'transporter':
+            partsBlock = [CARRY, CARRY, MOVE];
+            break;
+          case 'demo':
+            partsBlock = [WORK, MOVE];
+            break;
+          case 'manager':
+            spawn.spawnCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE], roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
+            return;
+      }
+      
+      //calculate cost of parts block
+      let partsBlockCost = 0;
+      for(let p in partsBlock){
+        switch(partsBlock[p]){
+          case WORK:
+            partsBlockCost += 100;
+            break;
+          case CARRY:
+          case MOVE:
+            partsBlockCost += 50;
+            break;
+          case ATTACK:
+            partsBlockCost += 80;
+            break;
+          case RANGED_ATTACK:
+            partsBlockCost += 150;
+            break;
+          case HEAL:
+            partsBlockCost += 250;
+            break;
+          case CLAIM:
+            partsBlockCost += 600;
+            break;
+          case TOUGH:
+            partsBlockCost += 10;
+            break;
         }
+      }
+
+      //construct creep parts based on energy capacity available
+      for(let i = 0; i < Math.floor(spawn.room.energyCapacityAvailable / partsBlockCost) && i < creepLevelCap; i++)
+          partsArray = partsArray.concat(partsBlock);
+      
+      
+      let result = spawn.spawnCreep(partsArray, roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
+      console.log(spawn.room.name + ":  " + roleString + " cost : " + partsBlockCost + ": "+ result);
+      
+      if(result === ERR_NOT_ENOUGH_ENERGY && roleString === "distributor" && !_.filter(Game.creeps, (creep) => creep.memory.role === 'transporter' && creep.memory.home === spawn.room.name).length){
+          
+          partsArray = [];
+          for(let i = 0; i < Math.floor(spawn.room.energyAvailable / 200) && i < creepLevelCap; i++)
+              partsArray = partsArray.concat(partsBlock);
+          
+          spawn.spawnCreep(partsArray, roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
+      }
     }
 }
 
