@@ -111,8 +111,8 @@ function sendDistressSignal(creep){
 }
 
 function reportInvaderCore(creep){
-  if(!Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].distressSignal)
-      Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].distressSignal = "SOS";
+  if(Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].invaderCore != true)
+      Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].invaderCore = true;
 }
 
 

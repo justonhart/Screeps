@@ -150,9 +150,11 @@ function storageSpawning(spawn){
             && !_.filter(Game.creeps, (creep) => creep.memory.role == 'mineralMiner' && creep.memory.home == spawn.room.name).length && (!spawn.room.storage.store[spawn.room.mineral.mineralType] || spawn.room.storage.store[spawn.room.mineral.mineralType] < 100000))
         roleString = 'mineralMiner';
     
-    
     else if(spawn.room.economyStatus > ECON_STARVING && _.findKey(spawn.room.memory.remoteMining, function(r){return r.distressSignal === "SOS";}))
         spawnCounterterrorist(spawn);
+
+    else if(spawn.room.economyStatus > ECON_STARVING && _.findKey(spawn.room.memory.remoteMining, function(r){return r.invaderCore === true;}) && _.filter(Game.creeps, (creep) => creep.memory.role === 'exterminator'  && creep.memory.home === spawn.room.name).length < 2)
+        spawnExterminator(spawn);
     
     else if(spawn.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_LINK}}).length && !_.filter(Game.creeps, (creep) => creep.memory.role === 'manager' && creep.memory.home === spawn.room.name).length)
         roleString = 'manager';
@@ -174,7 +176,8 @@ function storageSpawning(spawn){
       //calculate parts to use for creeps
       let partsArray = [];
       let partsBlock;
-      
+
+      //choose the parts block config we want
       switch(roleString){
           
           case 'mineralMiner':
@@ -450,6 +453,13 @@ function spawnCounterterrorist(spawn){
         console.log(spawn.room.name + ": spawning counterterrorist for " + miningRoom);
         spawn.room.memory.remoteMining[miningRoom].distressSignal = "Soldier Deployed";
     }
+}
+
+function spawnExterminator(spawn){
+  let miningRoom = _.findKey(spawn.room.memory.remoteMining, function(r){return r.invaderCore === true;});
+  if(spawn.spawnCreep([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE], "exterminator" + Game.time, {memory: {role: "exterminator", home: spawn.room.name, assignment: miningRoom}}) === 0){
+      console.log(spawn.room.name + ": spawning exterminator for " + miningRoom);
+  }
 }
 
 function checkReservers(spawn){

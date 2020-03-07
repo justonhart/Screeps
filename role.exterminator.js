@@ -1,4 +1,5 @@
-var counterTerrorist = {
+//exterminator is a melee creep designed to take down invader cores
+var exterminator = {
     run: function(creep){
         
         let posString = _.findKey(Game.rooms[creep.memory.home].memory.remoteMining[creep.memory.assignment].sources, function(c){return c != null});
@@ -10,26 +11,27 @@ var counterTerrorist = {
         else{
             let target = findTarget(creep);
             if(target){
-                if(creep.pos.inRangeTo(target, 3))
-                    creep.rangedAttack(target);
-                
-                if(!creep.pos.inRangeTo(target, 2))
-                    creep.moveTo(target);
-                
-                creep.heal(creep);
+                if(!creep.pos.isNearTo(target))
+                  creep.moveTo(target);
+
+                creep.attack(target);
             }
             else{
-              cleanup(creep);
+                cleanup(creep);
             }
         } 
     }
 }
 
 function findTarget(creep){
-  let target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
-  if(!target && creep.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_INVADER_CORE}}).length){
-    clearDistressSignal(creep);
+  let target;
+  
+  if(creep.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_INVADER_CORE}}).length)
     target = creep.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_INVADER_CORE}})[0];
+
+  if(!target){
+    Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].invaderCore = null;
+    target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
   }
     
 
@@ -46,7 +48,8 @@ function clearDistressSignal(creep){
 
 function cleanup(creep){
   clearDistressSignal(creep);
-  creep.memory.suicide = true;
+  Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].invaderCore = null;
   creep.suicide();
 }
-module.exports = counterTerrorist;
+
+module.exports = exterminator;

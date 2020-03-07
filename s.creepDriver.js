@@ -23,6 +23,7 @@ var roleInvasionTank = require('role.invasionTank');
 var roleHarasser = require('role.harasser');
 var roleMouse = require('role.mouse');
 var roleSigner = require('role.signer');
+var roleExterminator = require('role.exterminator');
 
 var driveCreep = {
     run: function(creep){
@@ -116,6 +117,9 @@ var driveCreep = {
                         break;
                     case "signer":
                         roleSigner.run(creep);
+                        break;
+                    case "exterminator":
+                        roleExterminator.run(creep);
                         break;
                 }
             end = Game.cpu.getUsed() - start;
