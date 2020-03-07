@@ -191,6 +191,8 @@ function storageSpawning(spawn){
           case 'manager':
             spawn.spawnCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE], roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
             return;
+          default:
+            partsBlock = [WORK, CARRY, MOVE];
       }
       
       //calculate cost of parts block
