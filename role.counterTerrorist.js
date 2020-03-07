@@ -8,7 +8,7 @@ var counterTerrorist = {
             creep.moveTo(dest);
             
         else{
-            let target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
+            let target = findTarget(creep);
             if(target){
                 if(creep.pos.inRangeTo(target, 3))
                     creep.rangedAttack(target);
@@ -19,20 +19,31 @@ var counterTerrorist = {
                 creep.heal(creep);
             }
             else{
-                
-                Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].distressSignal = null;
-                for(let source in Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].sources){
-                    if(Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].sources[source] === "SOS")
-                        Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].sources[source] = null;
-                }
-                creep.memory.suicide = true;
-                creep.suicide();
-                
-                if(creep.hits<creep.hitsMax)
-                    creep.heal(creep);
+              cleanup(creep);
             }
         } 
     }
 }
 
+function findTarget(creep){
+  let target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
+  if(!target && creep.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_INVADER_CORE}}).length)
+    target = creep.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_INVADER_CORE}})[0];
+
+  return target;
+}
+
+function clearDistressSignal(creep){
+  Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].distressSignal = null;
+  for(let source in Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].sources){
+    if(Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].sources[source] === "SOS")
+      Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].sources[source] = null;
+  }
+}
+
+function cleanup(creep){
+  clearDistressSignal(creep);
+  creep.memory.suicide = true;
+  creep.suicide();
+}
 module.exports = counterTerrorist;

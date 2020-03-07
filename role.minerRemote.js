@@ -14,6 +14,10 @@ var remoteMiner = {
         else{
             if(creep.hits < creep.hitsMax)
                 sendDistressSignal(creep);
+
+            if(creep.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_INVADER_CORE}}).length){
+              reportInvaderCore(creep);
+            }
             
             let source = sourcePos.lookFor(LOOK_SOURCES)[0];
             
@@ -106,9 +110,10 @@ function sendDistressSignal(creep){
     creep.suicide();
 }
 
-// function checkForCore(creep){
-//     if(console.log(Game.rooms["E48S36"].find(FIND_STRUCTURES, {filter: function(object) {return object.structureType == STRUCTURE_INVADER_CORE;}})))
-// }
+function reportInvaderCore(creep){
+  if(!Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].distressSignal)
+      Game.rooms[creep.memory.home].memory.remoteMining[creep.room.name].distressSignal = "SOS";
+}
 
 
 module.exports = remoteMiner;
