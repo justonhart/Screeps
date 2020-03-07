@@ -13,16 +13,30 @@ var consoleCommands = {
         }
         
         room.memory.remoteMining[sourceRoom].sources[source] = null;
-    },
-    
-    clearFlags: function()
-    {
-        for(let name in Game.flags){
-            console.log("Removing "+ name);
-            Game.flags[name].remove();
-        }
-        
-        return _.size(Game.flags) + " remaining";
     }
+}
+
+global.clearFlags = function(){
+    for(let name in Game.flags){
+        console.log("Removing "+ name);
+        Game.flags[name].remove();
+    }
+    return _.size(Game.flags) + " remaining";
+}
+;
+
+global.mineralReport = function(){
+  for(var roomName in Game.rooms){
+    let room = Game.rooms[roomName];
+    if(room.my){
+        console.log(roomName + ": " + Game.rooms[roomName].mineral.mineralType);
+    }
+  }
+}
+
+global.flagReport = function(){
+  for(var flag in Game.flags){
+    console.log(flag)
+  }
 }
 module.exports = consoleCommands;
