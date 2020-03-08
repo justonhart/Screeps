@@ -9,8 +9,21 @@ var reserver = {
             creep.signController(Game.rooms[creep.memory.assignment].controller, "Mining territory of jhart22");
         }
         
-        else
+        else{
+          if(Game.rooms[creep.memory.assignment]){
             creep.moveTo(Game.rooms[creep.memory.assignment].controller, {reusePath: 50});
+          }
+
+          else{
+            let x = _.findKey(Game.rooms[creep.memory.home].memory.remoteMining[creep.memory.assignment].sources, function(src){return true;}).split(",")[0];
+            let y = _.findKey(Game.rooms[creep.memory.home].memory.remoteMining[creep.memory.assignment].sources, function(src){return true;}).split(",")[1];
+  
+            let roomPos = new RoomPosition(x,y,creep.memory.assignment);
+
+            creep.moveTo(roomPos);
+          }
+        }
+            
     }
 };
 
