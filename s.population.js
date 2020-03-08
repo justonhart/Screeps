@@ -170,12 +170,21 @@ function storageSpawning(spawn){
     
     else if(spawn.room.controller.sign && !_.filter(Game.creeps, (creep) => creep.memory.role === 'signer' && creep.memory.home === spawn.room.name).length)
         spawn.spawnCreep([MOVE], "signer "+ spawn.room.name, {memory: {role: 'signer', home: spawn.room.name}});
-    
+
+    else if(spawn.room.name == Memory.empire.invasionSpawnRoom && Game.flags.attackFlag && _.filter(Game.creeps, (creep) => (creep.memory.role == 'invader')).length < 1)
+      roleString = 'invader';
+
+    else if(spawn.room.name == Memory.empire.invasionSpawnRoom && Game.flags.attackFlag && _.filter(Game.creeps, (creep) => (creep.memory.role == 'invasionHealer')).length < 1)
+      roleString = 'invasionHealer';
+      
     if(roleString){
 
       //calculate parts to use for creeps
       let partsArray = [];
       let partsBlock;
+
+      //if the creeps are designated for combat, tough needs to be placed in front of everything else
+      let sortFlag = false;
 
       //choose the parts block config we want
       switch(roleString){
@@ -194,6 +203,13 @@ function storageSpawning(spawn){
           case 'manager':
             spawn.spawnCreep([CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE], roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
             return;
+          case 'invader':
+            partsBlock = [ATTACK, MOVE];
+            sortFlag = true;
+            break;
+          case 'invasionHealer':
+            partsBlock = [HEAL, MOVE];
+            break;
           default:
             partsBlock = [WORK, CARRY, MOVE];
       }
@@ -230,7 +246,10 @@ function storageSpawning(spawn){
       //construct creep parts based on energy capacity available
       for(let i = 0; i < Math.floor(spawn.room.energyCapacityAvailable / partsBlockCost) && i < creepLevelCap; i++)
           partsArray = partsArray.concat(partsBlock);
-      
+
+      if(sortFlag){
+        
+      }
       
       let result = spawn.spawnCreep(partsArray, roleString+Game.time, {memory: {role: roleString, home:spawn.room.name}});
 

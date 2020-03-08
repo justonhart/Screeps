@@ -37,7 +37,7 @@ var roleInvader = {
                     var target = findTarget(creep);
                     if(target){
                         creep.attack(target);
-                        creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
+                        creep.moveTo(target, {visualizePathStyle: {stroke: '#e62712'}});
                     }
                     
                     else{
