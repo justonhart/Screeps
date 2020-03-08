@@ -21,7 +21,6 @@ var roleColonizer = require('role.colonizer');
 var roleInvasionHealer = require('role.invasionHealer');
 var roleInvasionTank = require('role.invasionTank');
 var roleHarasser = require('role.harasser');
-var roleMouse = require('role.mouse');
 var roleSigner = require('role.signer');
 var roleExterminator = require('role.exterminator');
 
