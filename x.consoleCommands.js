@@ -32,11 +32,40 @@ global.mineralReport = function(){
         console.log(roomName + ": " + Game.rooms[roomName].mineral.mineralType);
     }
   }
+
+  return 0;
 }
 
 global.flagReport = function(){
   for(var flag in Game.flags){
     console.log(flag)
   }
+
+  return 0;
+}
+
+global.econReport = function(){
+  for(var roomName in Game.rooms){
+    let room = Game.rooms[roomName];
+    if(room.my){
+        console.log(roomName + ": " + Game.rooms[roomName].economyStatus);
+    }
+  }
+
+  return 0;
+}
+
+global.clearEmpireMemory = function(){
+  for(let m in Memory.empire){
+    delete Memory.empire[m];
+  }
+
+  return 0;
+}
+
+global.setInvasionSpawn = function(name){
+  Memory.empire.invasionSpawnRoom = name;
+
+  return name;
 }
 module.exports = consoleCommands;
