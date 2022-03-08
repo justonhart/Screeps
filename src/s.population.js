@@ -437,9 +437,6 @@ function calculateBuilders(spawn){
 }
 
 function calculateUpgraders(spawn){
-    
-    
-    
     if(spawn.room.controller.level === 8)
         return 1;
     
