@@ -1,0 +1,26 @@
+{
+  "name": "screepscode",
+  "version": "1.0.0",
+  "description": "This is the code I've produced by myself for Screeps. Currently there is no documentation in place for using it, but I try to keep it at least readable enough for myself to understand whats going on after extended time away from the game. I am planning on documenting everything I've implemented, perhaps through a GitHub wiki page.",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justonhart/ScreepsCode.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/justonhart/ScreepsCode/issues"
+  },
+  "homepage": "https://github.com/justonhart/ScreepsCode#readme",
+  "devDependencies": {
+    "grunt": "^1.4.1",
+    "grunt-screeps": "^1.5.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0"
+  }
+}
