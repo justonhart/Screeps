@@ -144,7 +144,7 @@ function driveTowers(room){
     
     
     //otherwise, repair
-    else{
+    else if(false){
         
         targets = _.sortBy(room.find(FIND_STRUCTURES, {filter: (structure) => {return (structure.structureType == STRUCTURE_RAMPART && structure.hits < 500)
         || (structure.structureType !== STRUCTURE_RAMPART && structure.structureType !== STRUCTURE_WALL) && structure.hits < structure.hitsMax}}), s => s.hits);
