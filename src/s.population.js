@@ -134,8 +134,7 @@ function storageSpawning(spawn){
     else if(spawn.room.name === Memory.empire.demoSpawnRoom && !_.filter(Game.creeps, (creep) => creep.memory.role === 'demo').length < 2)
         roleString = 'demo';//spawn.spawnCreep([WORK, WORK, WORK, WORK, WORK, WORK,WORK, WORK, WORK, WORK, MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], "demo"+Game.time, {memory: {role: 'demo'}});
     
-    else if(spawn.room.find(FIND_STRUCTURES, {filter: structure => {return structure.structureType === STRUCTURE_TOWER}}).length == 0
-    && !(_.filter(Game.creeps, (creep) => creep.memory.role === 'maintenance' && creep.memory.home === spawn.room.name).length))
+    else if(!(_.filter(Game.creeps, (creep) => creep.memory.role === 'maintenance' && creep.memory.home === spawn.room.name).length))
         roleString = 'maintenance';
     
     else if(spawn.room.economyStatus >= ECON_RECOVERING && spawn.room.find(FIND_CONSTRUCTION_SITES, {filter: s => {return s.structureType !== STRUCTURE_RAMPART && s.structureType !== STRUCTURE_WALL}}).length && (_.filter(Game.creeps, (creep) => (creep.memory.role === 'builder' && creep.memory.home === spawn.room.name)).length < NUM_BUILDERS))
