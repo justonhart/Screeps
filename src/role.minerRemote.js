@@ -75,7 +75,7 @@ var remoteMiner = {
                     creep.moveTo(destination, {reusePath: 50});
                 
                 //if there, but no construction site, make one    
-                else if(creep.room.controller.reservation && creep.room.controller.reservation.username === "jhart22"){
+                else{
                     creep.room.createConstructionSite(creep.pos, STRUCTURE_CONTAINER);
                     creep.memory.destination = creep.pos.lookFor(LOOK_CONSTRUCTION_SITES)[0].id;
                 }
@@ -93,10 +93,16 @@ function calculateDestination(creep){
     
     let container = _.find(creep.room.lookForAtArea(LOOK_STRUCTURES, source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true), s=> {return s.structure.structureType == STRUCTURE_CONTAINER});
     
-    if(container)
+    if(container && !container.structure.pos.lookFor(LOOK_CREEPS).length){
         creep.memory.destination = container.structure.id;
-    else if(_.find(creep.room.lookForAtArea(LOOK_CONSTRUCTION_SITES, source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true), s=> {return s.constructionSite.structureType == STRUCTURE_CONTAINER}))
-        creep.memory.destination = _.find(creep.room.lookForAtArea(LOOK_CONSTRUCTION_SITES, source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true), s=> {return s.constructionSite.structureType == STRUCTURE_CONTAINER}).constructionSite.id;
+        return;
+    }
+     
+    let site = _.find(creep.room.lookForAtArea(LOOK_CONSTRUCTION_SITES, source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true), s=> {return s.constructionSite.structureType == STRUCTURE_CONTAINER});
+    if(site && !site.constructionSite.pos.lookFor(LOOK_CREEPS).length){
+        creep.memory.destination = site.constructionSite.id;
+        return;
+    }
     else
         creep.memory.destination = source.id; 
 }
