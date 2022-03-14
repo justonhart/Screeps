@@ -121,8 +121,7 @@ function storageSpawning(spawn){
         spawn.spawnCreep([MOVE,MOVE,MOVE,MOVE,MOVE,CLAIM], 'CLAIMER',{memory: {role: 'claimer', waypoint: 1}});
     
     else if(spawn.room.name === Memory.empire.colonyLaunchRoom && _.filter(Game.creeps, (creep) => creep.memory.role === 'colonizer').length < 2)
-        spawn.spawnCreep([WORK, CARRY,  MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
-        'colonizer'+Game.time,{memory: {role: 'colonizer', waypoint: 1}});
+        roleString = 'colonizer';
     
     else if(_.filter(Game.creeps, (creep) => creep.memory.role === 'upgrader'  && creep.memory.home === spawn.room.name).length < NUM_UPGRADERS){
         roleString = 'upgrader';
@@ -207,6 +206,9 @@ function storageSpawning(spawn){
             break;
           case 'invasionHealer':
             partsBlock = [HEAL, MOVE];
+            break;
+        case 'colonizer':
+            partsBlock = [WORK, CARRY, MOVE, MOVE];
             break;
           default:
             partsBlock = [WORK, CARRY, MOVE];
