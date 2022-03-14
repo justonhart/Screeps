@@ -291,8 +291,7 @@ function ecoSpawning(spawn){
     && (spawn.room.find(FIND_CONSTRUCTION_SITES, {filter: s => {return s.structureType === STRUCTURE_WALL || s.structureType === STRUCTURE_RAMPART}}).length || spawn.room.find(FIND_STRUCTURES, {filter: s => {return (s.structureType === STRUCTURE_WALL || s.structureType === STRUCTURE_RAMPART) && s.hits < spawn.room.getDefHP()}}).length))
         roleString = 'mason';
     
-    else if(spawn.room.find(FIND_STRUCTURES, {filter: structure => {return structure.structureType === STRUCTURE_TOWER}}).length == 0
-    && !(_.filter(Game.creeps, (creep) => creep.memory.role === 'maintenance' && creep.memory.home === spawn.room.name).length))
+    else if(!(_.filter(Game.creeps, (creep) => creep.memory.role === 'maintenance' && creep.memory.home === spawn.room.name).length))
         roleString = 'maintenance';
     
     if(roleString){
