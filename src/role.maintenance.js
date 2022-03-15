@@ -7,6 +7,7 @@ var roleMaintenance = {
         if(creep.memory.gathering === false) {
 
             if(creep.store[RESOURCE_ENERGY] === 0){
+                delete creep.memory.targetId;
                 creep.memory.gathering = true;
                 creep.gatherEnergy();
             }
