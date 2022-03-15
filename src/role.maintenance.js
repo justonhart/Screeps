@@ -12,15 +12,20 @@ var roleMaintenance = {
             }
 
             else{
-                var targets =  _.sortBy(creep.room.find(FIND_STRUCTURES, {filter: (structure) => {return (structure.structureType == STRUCTURE_RAMPART && structure.hits < 100)
-                    || (structure.structureType !== STRUCTURE_RAMPART && structure.structureType !== STRUCTURE_WALL) && structure.hits < structure.hitsMax}}), s => s.hits);
-                    
-                if(targets.length != 0) {
-                    if(creep.repair(targets[0]) == ERR_NOT_IN_RANGE) 
-                        creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                if(!creep.memory.targetId || Game.getObjectById(creep.memory.targetId).hits === Game.getObjectById(creep.memory.targetId).hitsMax){
+                    creep.memory.targetId = findTarget(creep);
                 }
-                else
-                    roleUpgrader.run(creep);
+
+                let target = Game.getObjectById(creep.memory.targetId);
+
+                switch(creep.repair(target)){
+                    case ERR_NOT_IN_RANGE:
+                        creep.moveTo(target, {visualizePathStyle: {stroke: '#ff9900', opacity: .5}});
+                        break;
+                    case ERR_INVALID_TARGET:
+                        delete creep.memory.targetId;
+                        break;
+                }
             }
         }
 	    else {
@@ -28,5 +33,29 @@ var roleMaintenance = {
         }
     }
 };
+
+/** @param {Creep} creep **/
+function findTarget(creep){
+    let myStructures = creep.room.find(FIND_STRUCTURES, {filter: s => s.hits < s.hitsMax && !(s.structureType === STRUCTURE_WALL || s.structureType === STRUCTURE_RAMPART)});
+    
+    if(myStructures.length){
+        //sort ascending by health ratio
+        myStructures.sort((a,b) => (a.hits/a.hitsMax) - (b.hits/b.hitsMax));
+
+        //take only the lowest ratio and find the closest target among them
+        let slice = myStructures.filter(s => (s.hits / s.hitsMax) === (myStructures[0].hits / myStructures[0].hitsMax) )
+        return creep.pos.findClosestByPath(slice).id;
+    }
+
+    let walls = creep.room.find(FIND_STRUCTURES).filter(s => (s.structureType === STRUCTURE_WALL || s.structureType === STRUCTURE_RAMPART) && s.hits < creep.room.getDefHP())
+    if(walls.length){
+        //sort by lowest hits
+        walls.sort((a,b) => a.hits - b.hits);
+
+        //take only the lowest ratio and find the closest target among them
+        let slice = walls.filter(s => s.hits === walls[0].hits);
+        return creep.pos.findClosestByPath(slice).id;
+    }
+}
 
 module.exports = roleMaintenance;
