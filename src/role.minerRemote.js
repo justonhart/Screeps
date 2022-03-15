@@ -74,6 +74,10 @@ var remoteMiner = {
                 if(!creep.pos.isNearTo(destination.pos))
                     creep.moveTo(destination, {reusePath: 50});
                 
+                else if(_.find(creep.pos.lookFor(LOOK_STRUCTURES), s => s.structureType == STRUCTURE_CONTAINER)){
+                    creep.memory.destination = _.find(creep.pos.lookFor(LOOK_STRUCTURES), s => s.structureType == STRUCTURE_CONTAINER).id;
+                }
+
                 //if there, but no construction site, make one    
                 else{
                     creep.room.createConstructionSite(creep.pos, STRUCTURE_CONTAINER);
