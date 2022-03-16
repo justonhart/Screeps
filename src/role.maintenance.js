@@ -13,7 +13,7 @@ var roleMaintenance = {
             }
 
             else{
-                if(!creep.memory.targetId || Game.getObjectById(creep.memory.targetId).hits === Game.getObjectById(creep.memory.targetId).hitsMax){
+                if(!creep.memory.targetId || Game.getObjectById(creep.memory.targetId) && Game.getObjectById(creep.memory.targetId).hits === Game.getObjectById(creep.memory.targetId).hitsMax){
                     creep.memory.targetId = findTarget(creep);
                 }
 
