@@ -6,7 +6,7 @@ var reserver = {
         
         if(creep.pos.isNearTo(Game.rooms[creep.memory.assignment].controller)){
             creep.reserveController(Game.rooms[creep.memory.assignment].controller);
-            creep.signController(Game.rooms[creep.memory.assignment].controller, "Mining territory of jhart22");
+            creep.signController(Game.rooms[creep.memory.assignment].controller, "Protected mining territory");
         }
         
         else{
