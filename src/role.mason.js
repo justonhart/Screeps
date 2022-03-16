@@ -20,9 +20,12 @@ var roleMason = {
                     creep.memory.target = null;
                 }
             }
-            else
-                creep.memory.target = null;
-            
+            else{
+                let newStructures = creep.pos.findInRange(FIND_STRUCTURES, 3, {filter: s => s.hits == 1});
+                if(newStructures.length){
+                    creep.memory.target = newStructures[0].id;
+                }
+            }
         }
         else{
             creep.gatherEnergy();
