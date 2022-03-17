@@ -10,7 +10,7 @@ module.exports = function(grunt) {
                 email: 'accounts@justonh.art',
                 //token provided in .env file
                 token: process.env.token,
-                branch: 'default',
+                branch: 'ScreepsCode',
             },
             dist: {
                 src: ['src/*.js']
