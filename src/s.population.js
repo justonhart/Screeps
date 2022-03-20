@@ -23,10 +23,13 @@ var popControl = {
 
 function preStorageSpawning(spawn){
     
-    const NUM_HARVESTERS = 3;
-    const NUM_UPGRADERS = calculateUpgraders(spawn);
-    const NUM_MASONS = 1;
-    const NUM_BUILDERS = calculateBuilders(spawn);
+    let spawnLimit = spawn.room.memory.sourceAccessPointsCount * 2;
+
+
+    const NUM_HARVESTERS = spawnLimit / 2;
+    const NUM_UPGRADERS = spawnLimit / 4;//calculateUpgraders(spawn);
+    const NUM_BUILDERS = spawnLimit / 4; //calculateBuilders(spawn);
+    const NUM_MASONS = 0;
     
     //highest number of body part sets for auto creeps
     var creepLevelCap = 5;
@@ -45,12 +48,12 @@ function preStorageSpawning(spawn){
         }
     }
     
-    else if(!(_.filter(Game.creeps, (creep) => creep.memory.role === 'maintenance' && creep.memory.home === spawn.room.name).length))
-        roleString = 'maintenance';
-    
     else if(spawn.room.find(FIND_CONSTRUCTION_SITES, {filter: s => {return s.structureType !== STRUCTURE_RAMPART && s.structureType !== STRUCTURE_WALL}}).length && (_.filter(Game.creeps, (creep) => (creep.memory.role === 'builder' && creep.memory.home === spawn.room.name)).length < NUM_BUILDERS))
         roleString = 'builder';
     
+    else if(!(_.filter(Game.creeps, (creep) => (creep.memory.role === 'maintenance' || creep.memory.role === 'builder') && creep.memory.home === spawn.room.name).length))
+        roleString = 'maintenance';
+
     else if((_.filter(Game.creeps, (creep) => (creep.memory.role === 'mason' && creep.memory.home === spawn.room.name)).length < NUM_MASONS)
     && (spawn.room.find(FIND_CONSTRUCTION_SITES, {filter: s => {return s.structureType === STRUCTURE_WALL || s.structureType === STRUCTURE_RAMPART}}).length || spawn.room.find(FIND_STRUCTURES, {filter: s => {return (s.structureType === STRUCTURE_WALL || s.structureType === STRUCTURE_RAMPART) && s.hits < spawn.room.getDefHP()}}).length))
         roleString = 'mason';

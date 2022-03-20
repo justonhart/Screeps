@@ -123,6 +123,7 @@ function initSourceAccessPoints(room){
             }
         }
     }
+    room.memory.sourceAccessPointsCount = room.memory.sourceAccessPoints.length;
 }
 
 function driveTowers(room){
